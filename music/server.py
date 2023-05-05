@@ -34,27 +34,26 @@ class Server:
         return True
 
     def get_embed_player(self) -> (Embed, View):
-        if self.play:
-            embed_title = "노래를 재생하고 있어요!"
-        else:
-            embed_title = "노래를 잠시 멈췄어요!"
-
         if self.playlist.is_empty():
-            embed_title = "노래 예약 기다리는 중"
-            embed_value = "없음"
+            embed = Embed(title="노래 예약 기다리는 중!", description="이 채널에 재생하고 싶은 노래의 **제목**이나 **URL**을 입력해주세요", color=0xd4b886)
             placeholder = "예약된 곡이 없어요"
         else:
+            if self.play:
+                title = "노래를 재생하고 있어요!"
+            else:
+                title = "노래를 잠시 멈췄어요!"
             current_music = self.playlist.current_music()
-            embed_value = f"{current_music.title}"
-            placeholder = "다음 곡이 없어요!"
+
             if self.playlist.is_next_exist():
                 placeholder = f"다음 곡) {self.playlist[1].title}"
+            else:
+                placeholder = "다음 곡이 없어요!"
 
-        # embed
-        embed = (
-            Embed(title=embed_title, color=0xd4b886)
-            .add_field(name="현재 노래", value=embed_value)
-        )
+            embed = (
+                Embed(title=title, color=0xd4b886)
+                .add_field(name="재생중인 노래", value=current_music.title)
+            )
+
 
         # select
         playlist_view = Select(placeholder=placeholder)
