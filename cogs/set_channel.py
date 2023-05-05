@@ -1,5 +1,4 @@
-from discord import app_commands, Interaction, TextChannel, Embed, SelectOption
-from discord.ui import View, Select
+from discord import app_commands, Interaction, TextChannel
 from discord.ext import commands
 
 from music.exceptions import ServerNotFound
@@ -19,12 +18,10 @@ class ChannelSetter(commands.Cog):
             server = self.bot.music_manager.add_server(guild_id)
         server.set_music_channel(channel)
 
-        # 이 부분 엠베드 포맷은 MusicPlayerManager에서 받아오는 걸로 하겠습니다.
-
-
+        embed, view = server.get_embed_player()
         await server.music_channel.send(embed=embed, view=view)
 
-        await interaction.response.send_message(f"{channel.name} 채널을 음악 예약 채널로 설정했어요!", ephemeral=True)
+        await interaction.response.send_message(f"{channel.mention} 채널을 음악 예약 채널로 설정했어요!", ephemeral=True)
         return
 
 
