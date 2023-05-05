@@ -12,17 +12,18 @@ from music.exceptions import QueueIsEmpty, NextMusicNotExist
 class Server:
     def __init__(self, bot, server: Guild):
         self.bot = bot
-        self.manager = bot.music_manager
+        # self.manager = bot.music_manager
         self.server: Guild = server
         self.music_channel: TextChannel | None = None
         self.embed_player: Message | None = None
+
         self.playlist = PlayList()
-        self.playlist.queue = [Music(title=f"title{i}", author=f"author{i}") for i in range(9)]
 
         self.play = False
 
-    def set_music_channel(self, music_channel: TextChannel) -> None:
-        self.music_channel = music_channel
+    def set_music_channel(self, embed_player: Message) -> None:
+        self.music_channel = embed_player.channel
+        self.embed_player = embed_player
         return
 
     def is_music_channel_exist(self) -> bool:
@@ -53,7 +54,6 @@ class Server:
                 Embed(title=title, color=0xd4b886)
                 .add_field(name="재생중인 노래", value=current_music.title)
             )
-
 
         # select
         playlist_view = Select(placeholder=placeholder)
@@ -162,3 +162,5 @@ class Server:
         )
 
         return embed, view
+
+

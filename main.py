@@ -1,15 +1,17 @@
 import os
 
-from discord import Intents, Activity, ActivityType, Status
+from discord import Intents, Activity, ActivityType, Status, Message
 from discord.ext import commands
 from dotenv import load_dotenv
 
 from music.player import MusicPlayerManager
+from music.exceptions import ServerNotFound
 
 
 class Bot(commands.Bot):
     def __init__(self):
         intents = Intents.default()
+        intents.message_content = True
         super().__init__(command_prefix="", intents=intents, sync_command=True)
 
         self.exts = ["cogs.set_channel"]
@@ -31,6 +33,23 @@ class Bot(commands.Bot):
                 name="아리 1시간", type=ActivityType.listening, state=Status.online
             )
         )
+        return
+
+    async def on_message(self, message: Message, /) -> None:
+        if message.author.bot:
+            return
+        try:
+            server = self.music_manager.get_server(message.guild.id)
+        except ServerNotFound:
+            return
+
+        # 통화방 들어가기
+        # 노래 찾기
+        # 플레이리스트 추가
+        # 노래 스트리밍: task 추가
+
+        await message.reply(message.content, delete_after=3)
+        await message.delete(delay=5)
         return
 
 

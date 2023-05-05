@@ -16,11 +16,10 @@ class ChannelSetter(commands.Cog):
             server = self.bot.music_manager.get_server(guild_id)
         except ServerNotFound:
             server = self.bot.music_manager.add_server(guild_id)
-        server.set_music_channel(channel)
 
         embed, view = server.get_embed_player()
-        msg = await server.music_channel.send(embed=embed, view=view)
-        server.playlist.embed_player = msg
+        msg = await channel.send(embed=embed, view=view)
+        server.set_music_channel(msg)
 
         await interaction.response.send_message(
             f"{channel.mention} 채널을 음악 예약 채널로 설정했어요!",
