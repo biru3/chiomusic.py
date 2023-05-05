@@ -17,5 +17,3 @@ class MusicPlayerManager:
         new_server = Server(bot=self.bot, server= self.bot.get_guild(server_id))
         self.servers[server_id] = new_server
         return new_server
-
-    def

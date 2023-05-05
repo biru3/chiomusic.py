@@ -19,9 +19,13 @@ class ChannelSetter(commands.Cog):
         server.set_music_channel(channel)
 
         embed, view = server.get_embed_player()
-        await server.music_channel.send(embed=embed, view=view)
+        msg = await server.music_channel.send(embed=embed, view=view)
+        server.playlist.embed_player = msg
 
-        await interaction.response.send_message(f"{channel.mention} 채널을 음악 예약 채널로 설정했어요!", ephemeral=True)
+        await interaction.response.send_message(
+            f"{channel.mention} 채널을 음악 예약 채널로 설정했어요!",
+            ephemeral=True
+        )
         return
 
 
