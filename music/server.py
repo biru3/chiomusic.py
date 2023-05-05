@@ -1,7 +1,11 @@
-from discord import Guild, TextChannel, Interaction, Embed, Message
-from discord.ui import View, Select
+from discord import Guild, TextChannel
+from discord import Interaction
+from discord import Embed, Message
+from discord import ButtonStyle
+from discord.ui import View, Select, Button
 
 from music.playlist import PlayList, Music
+from music.emoji import *
 
 
 class Server:
@@ -12,7 +16,7 @@ class Server:
         self.music_channel: TextChannel | None = None
         self.embed_player: Message | None = None
         self.playlist = PlayList()
-        self.playlist.queue = [Music(title="title1", author="author1"), Music(title="title2", author="author2")]
+        self.playlist.queue = [Music(title=f"title{i}", author=f"author{i}") for i in range(9)]
 
     def set_music_channel(self, music_channel: TextChannel) -> None:
         self.music_channel = music_channel
@@ -39,11 +43,13 @@ class Server:
             if self.playlist.is_next_exist():
                 placeholder = f"다음 곡) {self.playlist[1].title}"
 
+        # embed
         embed = (
-            Embed(title=embed_title)
+            Embed(title=embed_title, color=0xd4b886)
             .add_field(name="현재 노래", value=embed_value)
         )
 
+        # select
         playlist_view = Select(placeholder=placeholder)
         if self.playlist.is_next_exist():
             for i, music in enumerate(self.playlist[1:]):
@@ -57,7 +63,21 @@ class Server:
             elif not self.playlist.is_next_exist():
                 playlist_view.add_option(label="다음 곡이 없어요!", value="NoNextMusic")
 
-        async def playlist_select(interaction: Interaction) -> None:
+        # button
+        button_stop = Button(
+            emoji=BUTTON_STOP_EMOJI,
+            style=ButtonStyle.red
+        )
+        button_toggle = Button(
+            emoji=BUTTON_PAUSE_EMOJI,
+            style=ButtonStyle.gray
+        )
+        button_next = Button(
+            emoji=BUTTON_NEXT_EMOJI,
+            style=ButtonStyle.blurple
+        )
+
+        async def playlist_callback(interaction: Interaction) -> None:
             selected = playlist_view.values[0]
             self.playlist.jump_to(int(selected))
             updated_embed, updated_view = self.get_embed_player()
@@ -65,9 +85,26 @@ class Server:
             await interaction.response.send_message("곡을 넘겼어요!", ephemeral=True)
             return
 
-        playlist_view.callback = playlist_select
+        async def button_stop_callback(interaction: Interaction):
+            await interaction.response.send_message("멈춰!", ephemeral=True)
+
+        async def button_toggle_callback(interaction: Interaction):
+            await interaction.response.send_message("토글", ephemeral=True)
+
+        async def button_next_callback(interaction: Interaction):
+            await interaction.response.send_message("넘겨!", ephemeral=True)
+
+        playlist_view.callback = playlist_callback
+        button_stop.callback = button_stop_callback
+        button_toggle.callback = button_toggle_callback
+        button_next.callback = button_next_callback
+
         view = (
             View()
             .add_item(playlist_view)
+            .add_item(button_stop)
+            .add_item(button_toggle)
+            .add_item(button_next)
         )
+
         return embed, view
