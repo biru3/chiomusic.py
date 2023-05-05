@@ -27,15 +27,28 @@ class Server:
 
     def get_embed_player(self) -> (Embed, View):
         if self.playlist.is_empty():
+            embed_title = "음악 재생을 멈췄어요!"
+            embed_value = "없음"
+            placeholder = "예약된 곡이 없어요"
+        else:
+            current_music = self.playlist.current_music()
+            embed_title = "음악을 재생하고 있어요!"
+            embed_value = f"{current_music.title}"
             placeholder = "다음곡이 없어요!"
-            current_music = self.playlist.queue[0]
+            if self.playlist.is_next_exist():
+                placeholder = f"다음곡) {self.playlist[1].title}"
 
         embed = (
-            Embed(title="음악을 재생하고 있어요!")
-            .add_field(name="현재 노래", value="[{노래제목}](https://google.com)")
+            Embed(title=embed_title)
+            .add_field(name="현재 노래", value=embed_value)
         )
 
-        playlist_view = Select()
+        playlist_view = Select(placeholder=placeholder)
+        for i, music in enumerate(self.playlist[1:]):
+            value = str(i + 1)
+            label = f"{value}. {music.title}"
+            description = music.author
+            playlist_view.add_option(label=label, description=description, value=value)
 
         async def playlist_select(interaction: Interaction) -> None:
             selected = playlist_view.values[0]
@@ -47,7 +60,3 @@ class Server:
             .add_item(playlist_view)
         )
         return embed, view
-
-    # def send_embed_player(self, channel: TextChannel, interaction: Interaction = None) -> None:
-    #     if interaction is None:
-    #
