@@ -3,3 +3,6 @@ class ServerNotFound(Exception):
 
 class QueueIsEmpty(Exception):
     pass
+
+class NextMusicNotExist(Exception):
+    pass
