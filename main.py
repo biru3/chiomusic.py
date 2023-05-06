@@ -49,7 +49,7 @@ class Bot(commands.Bot):
         # 노래 스트리밍: task 추가
 
         await message.reply(message.content, delete_after=3)
-        await message.delete(delay=5)
+        await message.delete(delay=4)
         return
 
 
