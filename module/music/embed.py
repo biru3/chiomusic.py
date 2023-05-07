@@ -61,8 +61,9 @@ class EmbedPlayer:
 
             embed = (
                 Embed(title=title, color=0xD4B886)
-                .add_field(name="재생중인 노래", value=f"[{current_music.title}]({current_music.webpage_url})")
-                .add_field(name="채널", value=f"[{current_music.channel}]({current_music.channel_url})")
+                .add_field(name="재생중인 노래", value=f"[{current_music.title}]({current_music.webpage_url})", inline=False)
+                .add_field(name="채널", value=f"[{current_music.channel}]({current_music.channel_url})", inline=True)
+                .add_field(name="길이", value=current_music.duration, inline=True)
                 .set_image(url=current_music.thumbnail)
             )
 
@@ -71,8 +72,8 @@ class EmbedPlayer:
         if self.playlist.is_next_exist():
             for i, music in enumerate(self.playlist[1:]):
                 value = str(i + 1)
-                label = f"{value}. {music.title}"
-                description = music.channel
+                label = f"{value}) {music.title}"
+                description = f"{music.duration} | {music.channel}"
                 playlist_view.add_option(
                     label=label, description=description, value=value
                 )
