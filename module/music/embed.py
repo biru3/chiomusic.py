@@ -26,14 +26,24 @@ class EmbedPlayer:
 
     async def _check_member(self, interaction: Interaction) -> bool:
         if interaction.user.voice is None:
-            embed = Embed(title="음성 채널에 접속한 후에 노래를 예약해주세요!", description="치오와 같은 음성 채널에 접속한 멤버만 이 노래를 예약할 수 있어요")
-            await interaction.response.send_message(interaction.user.mention, embed=embed, delete_after=3)
+            embed = Embed(
+                title="음성 채널에 접속한 후에 노래를 예약해주세요!",
+                description="치오와 같은 음성 채널에 접속한 멤버만 이 노래를 예약할 수 있어요",
+            )
+            await interaction.response.send_message(
+                interaction.user.mention, embed=embed, delete_after=3
+            )
             return False
         for voice_channel in self.bot.voice_clients:
             if voice_channel.guild == self.server.guild:
                 if voice_channel.channel != interaction.user.voice.channel:
-                    embed = Embed(title="치오와 같은 음성 채널에 접속한 후에 노래를 예약해주세요!", description="치오와 같은 음성 채널에 접속한 멤버만 이 노래를 예약할 수 있어요")
-                    await interaction.response.send_message(interaction.user.mention, embed=embed, delete_after=3)
+                    embed = Embed(
+                        title="치오와 같은 음성 채널에 접속한 후에 노래를 예약해주세요!",
+                        description="치오와 같은 음성 채널에 접속한 멤버만 이 노래를 예약할 수 있어요",
+                    )
+                    await interaction.response.send_message(
+                        interaction.user.mention, embed=embed, delete_after=3
+                    )
                     return False
                 else:
                     return True
@@ -41,10 +51,12 @@ class EmbedPlayer:
 
     def get(self) -> (Embed, View):
         if self.playlist.is_empty():
-            embed = (
-                Embed(title="노래 예약 기다리는 중!", description="이 채널에 재생하고 싶은 노래의 **제목**이나 **URL**을 입력해주세요", color=0xD4B886)
-                .set_image(
-                    url="https://cdn.discordapp.com/attachments/1086549632882069564/1104730501597646910/IMG_2023_02_02_12_30_21.png")
+            embed = Embed(
+                title="노래 예약 기다리는 중!",
+                description="이 채널에 재생하고 싶은 노래의 **제목**이나 **URL**을 입력해주세요!",
+                color=0xD4B886,
+            ).set_image(
+                url="https://cdn.discordapp.com/attachments/1086549632882069564/1104730501597646910/IMG_2023_02_02_12_30_21.png"
             )
             placeholder = "예약된 곡이 없어요"
         else:
@@ -61,8 +73,16 @@ class EmbedPlayer:
 
             embed = (
                 Embed(title=title, color=0xD4B886)
-                .add_field(name="재생중인 노래", value=f"[{current_music.title}]({current_music.webpage_url})", inline=False)
-                .add_field(name="채널", value=f"[{current_music.channel}]({current_music.channel_url})", inline=True)
+                .add_field(
+                    name="재생중인 노래",
+                    value=f"[{current_music.title}]({current_music.webpage_url})",
+                    inline=False,
+                )
+                .add_field(
+                    name="채널",
+                    value=f"[{current_music.channel}]({current_music.channel_url})",
+                    inline=True,
+                )
                 .add_field(name="길이", value=current_music.duration, inline=True)
                 .set_image(url=current_music.thumbnail)
             )

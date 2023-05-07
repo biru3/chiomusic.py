@@ -43,7 +43,7 @@ def _keyword_search(keyword: str) -> Video:
         channel_url=video["channel"]["link"],
         duration=video["duration"],
         webpage_url=video["link"],
-        thumbnail=video["thumbnails"][0]["url"]
+        thumbnail=video["thumbnails"][0]["url"],
     )
 
 
