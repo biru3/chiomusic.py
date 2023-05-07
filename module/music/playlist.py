@@ -46,3 +46,6 @@ class PlayList:
         if self.is_empty():
             raise QueueIsEmpty
         return self.queue[item]
+
+    def __len__(self) -> int:
+        return len(self.queue)
