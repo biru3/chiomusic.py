@@ -8,6 +8,7 @@ from module.music.exceptions import QueueIsEmpty, NextMusicNotExist
 
 class EmbedPlayer:
     def __init__(self, server, message: Message = None, channel: TextChannel = None):
+        self.bot = server.bot
         self.server = server
         self.playlist: PlayList = server.playlist
 
@@ -94,9 +95,7 @@ class EmbedPlayer:
             await interaction.response.send_message(
                 "곡을 넘겼어요!", ephemeral=True, delete_after=3
             )
-
-            updated_embed, updated_view = self.get()
-            await interaction.message.edit(embed=updated_embed, view=updated_view)
+            await self.update()
             return
 
         async def button_stop_callback(interaction: Interaction):
@@ -106,8 +105,10 @@ class EmbedPlayer:
                 "안녕히계세요!", ephemeral=True, delete_after=3
             )
 
-            updated_embed, updated_view = self.get()
-            await interaction.message.edit(embed=updated_embed, view=updated_view)
+            await self.update()
+            for voice_channel in self.bot.voice_clients:
+                if voice_channel.guild == self.server.guild:
+                    await voice_channel.disconnect(force=True)
             return
 
         async def button_toggle_callback(interaction: Interaction):
@@ -127,8 +128,7 @@ class EmbedPlayer:
                     "노래를 멈출게요!", ephemeral=True, delete_after=3
                 )
 
-            updated_embed, updated_view = self.get()
-            await interaction.message.edit(embed=updated_embed, view=updated_view)
+            await self.update()
             return
 
         async def button_next_callback(interaction: Interaction):
@@ -149,8 +149,7 @@ class EmbedPlayer:
                     "다음 곡을 재생할게요!", ephemeral=True, delete_after=3
                 )
 
-            updated_embed, updated_view = self.get()
-            await interaction.message.edit(embed=updated_embed, view=updated_view)
+            await self.update()
             return
 
         playlist_view.callback = playlist_callback
