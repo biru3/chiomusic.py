@@ -1,5 +1,5 @@
-from music.server import Server
-from music.exceptions import ServerNotFound
+from module.music.server import Server
+from module.music.exceptions import ServerNotFound
 
 
 class MusicPlayerManager:
@@ -14,6 +14,6 @@ class MusicPlayerManager:
             raise ServerNotFound()
 
     def add_server(self, server_id: int) -> Server:
-        new_server = Server(bot=self.bot, server= self.bot.get_guild(server_id))
+        new_server = Server(bot=self.bot, server=self.bot.get_guild(server_id))
         self.servers[server_id] = new_server
         return new_server

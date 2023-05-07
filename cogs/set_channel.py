@@ -1,7 +1,7 @@
 from discord import app_commands, Interaction, TextChannel
 from discord.ext import commands
 
-from music.exceptions import ServerNotFound
+from module.music.exceptions import ServerNotFound
 
 
 class ChannelSetter(commands.Cog):
@@ -22,9 +22,7 @@ class ChannelSetter(commands.Cog):
         server.set_music_channel(msg)
 
         await interaction.response.send_message(
-            f"{channel.mention} 채널을 음악 예약 채널로 설정했어요!",
-            ephemeral=True,
-            delete_after=3
+            f"{channel.mention} 채널을 음악 예약 채널로 설정했어요!", ephemeral=True, delete_after=3
         )
         return
 

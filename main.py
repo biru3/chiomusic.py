@@ -4,8 +4,9 @@ from discord import Intents, Activity, ActivityType, Status, Message
 from discord.ext import commands
 from dotenv import load_dotenv
 
-from music.player import MusicPlayerManager
-from music.exceptions import ServerNotFound
+from module.music.player import MusicPlayerManager
+from module.music.exceptions import ServerNotFound
+from module.youtube.search import youtube_search
 
 
 class Bot(commands.Bot):
@@ -43,17 +44,23 @@ class Bot(commands.Bot):
         except ServerNotFound:
             return
 
+        video = await youtube_search(message.content)
+
+        server.playlist.add(video)
+        await server.update_embed_player()
+
+        await message.reply(video.title, delete_after=3)
+        await message.delete(delay=3)
+
         # 통화방 들어가기
         # 노래 찾기
         # 플레이리스트 추가
         # 노래 스트리밍: task 추가
 
-        await message.reply(message.content, delete_after=3)
-        await message.delete(delay=4)
         return
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     load_dotenv()
     discord_api_token = os.environ.get("DiscordApiToken")
 

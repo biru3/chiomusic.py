@@ -1,17 +1,12 @@
 from dataclasses import dataclass
 
-from music.exceptions import QueueIsEmpty, NextMusicNotExist
-
-
-@dataclass()
-class Music:
-    title: str
-    author: str
+from module.music.exceptions import QueueIsEmpty, NextMusicNotExist
+from module.youtube.video import Video
 
 
 class PlayList:
     def __init__(self):
-        self.queue: list[Music] = []
+        self.queue: list[Video] = []
 
     def is_empty(self) -> bool:
         if self.queue:
@@ -23,15 +18,15 @@ class PlayList:
             return False
         return True
 
-    def current_music(self) -> Music:
+    def current_music(self) -> Video:
         if self.is_empty():
             raise QueueIsEmpty()
         return self.queue[0]
 
-    def add(self, music: Music):
+    def add(self, music: Video):
         self.queue.append(music)
 
-    def next(self) -> Music:
+    def next(self) -> Video:
         if self.is_empty():
             raise QueueIsEmpty()
         self.queue.pop(0)
@@ -39,7 +34,7 @@ class PlayList:
             raise NextMusicNotExist()
         return self.queue[0]
 
-    def jump_to(self, value: int) -> Music:
+    def jump_to(self, value: int) -> Video:
         self.queue = self.queue[value:]
         return self.queue[0]
 
@@ -47,7 +42,7 @@ class PlayList:
         self.queue = []
         return
 
-    def __getitem__(self, item: int) -> Music | list[Music]:
+    def __getitem__(self, item: int) -> Video | list[Video]:
         if self.is_empty():
             raise QueueIsEmpty
         return self.queue[item]
