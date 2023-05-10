@@ -82,7 +82,7 @@ class EmbedPlayer:
                 .add_field(name="길이", value=current_music.duration, inline=True)
                 .set_image(url=current_music.thumbnail)
             )
-        embed.set_footer(text="chio music v2.0.0-beta")
+        embed.set_footer(text="chio music v2-beta")
 
         # select
         playlist_view = Select(placeholder=placeholder)
