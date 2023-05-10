@@ -4,17 +4,10 @@ from youtubesearchpython import VideosSearch
 
 from module.youtube.video import Video
 
-YDL_OPTIONS = {
-    "extractaudio": True,
-    "audioformat": "mp3",
-    "postprocessors": [{
-        "key": "FFmpegExtractAudio",
-        "preferredcodec": "mp3",
-        "preferredquality": "320k",
-    }]}
+YDL_OPTIONS = {"format": "bestaudio"}
 
 
-def youtube_search(arg: str) -> Video:
+async def youtube_search(arg: str) -> Video:
     try:
         requests.get(arg)
     except: # requests 예외 에러가 너무 많음

@@ -18,10 +18,6 @@ class EmbedPlayer:
     def init(self):
         self.channel = None
         self.message = None
-
-    def set(self, channel: TextChannel, message: Message):
-        self.channel = channel
-        self.message = message
         return
 
     async def _check_member(self, interaction: Interaction) -> bool:
@@ -60,7 +56,7 @@ class EmbedPlayer:
             )
             placeholder = "예약된 곡이 없어요"
         else:
-            if self.server.play:
+            if self.server.video_stream.playing:
                 title = "노래를 재생하고 있어요!"
             else:
                 title = "노래를 잠시 멈췄어요!"
@@ -106,7 +102,7 @@ class EmbedPlayer:
         # button
         button_stop = Button(emoji=BUTTON_STOP_EMOJI, style=ButtonStyle.red)
 
-        if self.server.play:
+        if self.server.video_stream.playing:
             toggle_emoji = BUTTON_PAUSE_EMOJI
             toggle_color = ButtonStyle.green
         else:
@@ -136,6 +132,7 @@ class EmbedPlayer:
             await interaction.response.send_message(
                 "곡을 넘겼어요!", ephemeral=True, delete_after=3
             )
+            self.server.video_stream.next()
             await self.update()
             return
 
@@ -149,10 +146,11 @@ class EmbedPlayer:
                 "안녕히계세요!", ephemeral=True, delete_after=3
             )
 
-            await self.update()
             for voice_channel in self.bot.voice_clients:
                 if voice_channel.guild == self.server.guild:
                     await voice_channel.disconnect(force=True)
+            self.server.video_stream.stop()
+            await self.update()
             return
 
         async def button_toggle_callback(interaction: Interaction):
@@ -165,15 +163,16 @@ class EmbedPlayer:
                 )
                 return
 
-            self.play = not self.play
-            if self.play:
+            if not self.server.video_stream.playing:
                 await interaction.response.send_message(
                     "노래를 다시 재생할게요!", ephemeral=True, delete_after=3
                 )
+                self.server.video_stream.resume()
             else:
                 await interaction.response.send_message(
                     "노래를 멈출게요!", ephemeral=True, delete_after=3
                 )
+                self.server.video_stream.pause()
 
             await self.update()
             return
@@ -189,15 +188,16 @@ class EmbedPlayer:
                 )
                 return
             except NextMusicNotExist:
-                self.play = False
                 await interaction.response.send_message(
                     "다음 노래가 없어, 재생을 중단할게요!", ephemeral=True, delete_after=3
                 )
+                self.server.video_stream.stop()
             else:
                 await interaction.response.send_message(
                     "다음 곡을 재생할게요!", ephemeral=True, delete_after=3
                 )
 
+            self.server.video_stream.next()
             await self.update()
             return
 

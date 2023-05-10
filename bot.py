@@ -1,3 +1,5 @@
+import asyncio
+
 from discord import (
     Intents,
     Activity,
@@ -7,6 +9,7 @@ from discord import (
     Member,
     Embed,
     ClientException,
+    FFmpegPCMAudio
 )
 from discord.ext import commands
 
@@ -51,9 +54,9 @@ class ChioMusic(commands.Bot):
             return
         for voice_client in self.voice_clients:
             if (
-                voice_client.guild == server.guild
-                and before.channel != after.channel
-                and len(voice_client.channel.members) == 1
+                    voice_client.guild == server.guild
+                    and before.channel != after.channel
+                    and len(voice_client.channel.members) == 1
             ):
                 await voice_client.disconnect(force=True)
                 server.playlist.clear()
@@ -71,8 +74,10 @@ class ChioMusic(commands.Bot):
         try:
             server = self.music_manager.get_server(message.guild.id)
         except ServerNotFound:
+            print("서버를 찾지 못함")
             return
         if not server.is_music_channel(message.channel):
+            print("음악 채널이 아님")
             return
         if message.author.voice is None:
             await message.delete()
@@ -103,19 +108,17 @@ class ChioMusic(commands.Bot):
                         )
                     else:
                         break
-
         await message.delete()
         video = await youtube_search(message.content)
 
         server.playlist.add(video)
-        await server.update_player()
 
         embed = Embed(title="노래를 추가할게요!", description=video.title)
         await message.channel.send(embed=embed, delete_after=3)
 
-        # 통화방 들어가기
-        # 노래 찾기
-        # 플레이리스트 추가
-        # 노래 스트리밍: task 추가
+        if len(server.playlist) == 1:
+            await server.video_stream.play()
+            return
 
+        await server.update_player()
         return

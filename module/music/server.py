@@ -3,6 +3,7 @@ from discord.ui import View
 
 from module.music.playlist import PlayList
 from module.music.embed import EmbedPlayer
+from module.music.steam import VideoStream
 
 
 class Server:
@@ -12,20 +13,22 @@ class Server:
         self.guild: Guild = guild
         self.playlist = PlayList()
         self.embed_player: EmbedPlayer = EmbedPlayer(self)
+        self.video_stream: VideoStream = VideoStream(self, self.playlist)
 
-        self.play = False
-
-    def set_music_channel(self, message: Message) -> None:
-        self.embed_player.set(message.channel, message)
+    def set_music_channel(self, channel: TextChannel = None, message: Message = None) -> None:
+        if channel is not None:
+            self.embed_player.channel = channel
+        if message is not None:
+            self.embed_player.message = message
         return
 
-    def is_music_channel_exist(self) -> bool:
-        if self.embed_player.channel is None:
-            return False
-        if self.bot.get_channel(self.embed_player.channel.id) is None:
-            self.embed_player.init()
-            return False
-        return True
+    # def is_music_channel_exist(self) -> bool:
+    #     if self.embed_player.channel is None:
+    #         return False
+    #     if self.bot.get_channel(self.embed_player.channel.id) is None:
+    #         self.embed_player.init()
+    #         return False
+    #     return True
 
     def is_music_channel(self, channel: TextChannel) -> bool:
         if channel == self.embed_player.channel:
