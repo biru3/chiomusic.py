@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 import requests
 import youtube_dl
 from youtubesearchpython import VideosSearch
@@ -26,7 +28,7 @@ def _url_search(url: str) -> Video:
         title=video["title"],
         channel=video["channel"],
         channel_url=video["channel_url"],
-        duration=video["duration"],
+        duration=str(timedelta(seconds=video["duration"])),
         webpage_url=video["webpage_url"],
         thumbnail=video["thumbnail"],
         stream_url=video["formats"][0]["url"]

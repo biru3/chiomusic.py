@@ -79,7 +79,7 @@ class EmbedPlayer:
                     value=f"[{current_music.channel}]({current_music.channel_url})",
                     inline=True,
                 )
-                .add_field(name="길이", value=f"{int(current_music.duration)//60} : {int(current_music.duration) % 60}", inline=True)
+                .add_field(name="길이", value=current_music.duration, inline=True)
                 .set_image(url=current_music.thumbnail)
             )
         embed.set_footer(text="chio music v2.0.0-beta")
