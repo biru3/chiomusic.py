@@ -8,8 +8,7 @@ from discord import (
     Message,
     Member,
     Embed,
-    ClientException,
-    FFmpegPCMAudio
+    ClientException
 )
 from discord.ext import commands
 
@@ -20,6 +19,8 @@ from module.youtube.search import youtube_search
 
 class ChioMusic(commands.Bot):
     def __init__(self):
+        self.version = "v2.1.1"
+
         intents = Intents.default()
         intents.message_content = True
         super().__init__(command_prefix="", intents=intents, sync_command=True)
