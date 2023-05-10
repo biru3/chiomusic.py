@@ -43,7 +43,7 @@ class VideoStream:
                     video = self.playlist.current_music()
                     self.server.guild.voice_client.play(FFmpegPCMAudio(video.stream_url, executable="ffmpeg.exe", **FFMPEG_OPTIONS))
                 except QueueIsEmpty:
-                    return
+                    pass
 
             if not self.server.guild.voice_client.is_playing() and not self.server.guild.voice_client.is_paused():
                 try:
