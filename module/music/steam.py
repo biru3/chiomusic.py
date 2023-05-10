@@ -46,6 +46,7 @@ class VideoStream:
                 else:
                     video = self.playlist.current_music()
                     self.server.guild.voice_client.play(FFmpegPCMAudio(video.stream_url, executable="ffmpeg.exe", **FFMPEG_OPTIONS))
+                    await self.server.update_player()
             await asyncio.sleep(1)
 
     async def play(self):
