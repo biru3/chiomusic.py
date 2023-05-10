@@ -25,6 +25,7 @@ class ChannelSetter(commands.Cog):
         await interaction.response.send_message(
             f"{channel.mention} 채널을 음악 예약 채널로 설정했어요!", ephemeral=True, delete_after=3
         )
+        self.bot.music_manager.save_server()
         return
 
 

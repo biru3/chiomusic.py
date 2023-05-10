@@ -43,6 +43,7 @@ class ChioMusic(commands.Bot):
                 name="아리 1시간", type=ActivityType.listening, state=Status.online
             )
         )
+        await self.music_manager.load_server()
         return
 
     async def on_voice_state_update(self, member: Member, before, after):

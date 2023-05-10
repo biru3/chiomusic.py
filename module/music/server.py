@@ -22,13 +22,13 @@ class Server:
             self.embed_player.message = message
         return
 
-    # def is_music_channel_exist(self) -> bool:
-    #     if self.embed_player.channel is None:
-    #         return False
-    #     if self.bot.get_channel(self.embed_player.channel.id) is None:
-    #         self.embed_player.init()
-    #         return False
-    #     return True
+    def is_music_channel_exist(self) -> bool:
+        if self.embed_player.channel is None:
+            return False
+        if self.bot.get_channel(self.embed_player.channel.id) is None:
+            self.embed_player.init()
+            return False
+        return True
 
     def is_music_channel(self, channel: TextChannel) -> bool:
         if channel == self.embed_player.channel:
