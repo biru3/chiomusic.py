@@ -36,8 +36,7 @@ class VideoStream:
                 try:
                     self.playlist.next()
                 except NextMusicNotExist:
-                    return
-                except QueueIsEmpty:
+                    await self.server.update_player()
                     while True:
                         await asyncio.sleep(1)
                         self.queue_empty_timer += 1
@@ -69,7 +68,8 @@ class VideoStream:
 
     def stop(self):
         self.playing = False
-        self.server.guild.voice_client.stop()
+        if self.server.guild.voice_client is not None:
+            self.server.guild.voice_client.stop()
         return
 
     def next(self):
