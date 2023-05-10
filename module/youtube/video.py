@@ -9,3 +9,4 @@ class Video:
     duration: str
     webpage_url: str
     thumbnail: str
+    stream_url: str
