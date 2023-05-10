@@ -19,7 +19,7 @@ from module.youtube.search import youtube_search
 
 class ChioMusic(commands.Bot):
     def __init__(self):
-        self.version = "v2.1.3"
+        self.version = "v2.1.4"
 
         intents = Intents.default()
         intents.message_content = True
@@ -118,7 +118,7 @@ class ChioMusic(commands.Bot):
         embed = Embed(title="노래를 추가할게요!", description=video.title)
         await message.channel.send(embed=embed, delete_after=3)
 
-        if server.guild.voice_client is None and len(server.playlist) == 1:
+        if len(server.playlist) == 1:
             await server.video_stream.play()
             return
 
