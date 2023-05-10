@@ -37,11 +37,10 @@ class VideoStream:
                     self.playlist.next()
                 except NextMusicNotExist:
                     await self.server.update_player()
-                    while True:
-                        await asyncio.sleep(1)
-                        self.queue_empty_timer += 1
-                        if self.queue_empty_timer >= 300:
-                            await self.server.guild.voice_client.disconnect()
+                except QueueIsEmpty:
+                    self.queue_empty_timer += 1
+                    if self.queue_empty_timer >= 300:
+                        await self.server.guild.voice_client.disconnect()
                 else:
                     video = self.playlist.current_music()
                     self.server.guild.voice_client.play(FFmpegPCMAudio(video.stream_url, executable="ffmpeg.exe", **FFMPEG_OPTIONS))
