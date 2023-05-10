@@ -52,7 +52,7 @@ class VideoStream:
                     await self.server.update_player()
                 except QueueIsEmpty:
                     if await self.wait():
-                        await self.run()
+                        await self.play()
                         return
                     return
                 else:

@@ -43,6 +43,9 @@ class EmbedPlayer:
                     return False
                 else:
                     return True
+            else:
+                # 치오가 존재하는 다른 서버 통화방에 들어가 있을 때
+                pass
         return True
 
     def get(self) -> (Embed, View):
