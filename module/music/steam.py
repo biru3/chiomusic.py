@@ -18,6 +18,19 @@ class VideoStream:
 
         self.queue_empty_timer = 0
 
+    async def wait(self) -> bool:
+        self.queue_empty_timer = 0
+        while True:
+            await asyncio.sleep(1)
+            self.queue_empty_timer += 1
+            if self.playlist:
+                return True
+            if self.queue_empty_timer >= 300:
+                for voice_channel in self.server.bot.voice_clients:
+                    if voice_channel.guild == self.server.guild:
+                        await voice_channel.disconnect(force=True)
+                return False
+
     async def run(self):
         while True:
             if self.server.guild.voice_client is None:
@@ -38,9 +51,10 @@ class VideoStream:
                 except NextMusicNotExist:
                     await self.server.update_player()
                 except QueueIsEmpty:
-                    self.queue_empty_timer += 1
-                    if self.queue_empty_timer >= 300:
-                        await self.server.guild.voice_client.disconnect()
+                    if await self.wait():
+                        await self.run()
+                        return
+                    return
                 else:
                     video = self.playlist.current_music()
                     self.server.guild.voice_client.play(FFmpegPCMAudio(video.stream_url, executable="ffmpeg.exe", **FFMPEG_OPTIONS))

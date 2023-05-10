@@ -19,7 +19,7 @@ from module.youtube.search import youtube_search
 
 class ChioMusic(commands.Bot):
     def __init__(self):
-        self.version = "v2.1.1"
+        self.version = "v2.1.2"
 
         intents = Intents.default()
         intents.message_content = True
