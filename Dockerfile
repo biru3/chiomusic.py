@@ -15,7 +15,7 @@ RUN pip3 install --no-cache-dir --upgrade pip && \
 
 COPY . .
 
-EXPOSE 6974
+EXPOSE 5000
 
 ENV DiscordApiToken ${DiscordApiToken}
 
