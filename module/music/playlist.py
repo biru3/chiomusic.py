@@ -1,5 +1,3 @@
-from dataclasses import dataclass
-
 from module.music.exceptions import QueueIsEmpty, NextMusicNotExist
 from module.youtube.video import Video
 

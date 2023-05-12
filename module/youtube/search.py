@@ -1,7 +1,7 @@
 from datetime import timedelta
 
 import requests
-import youtube_dl
+from Lib import youtube_dl
 from youtubesearchpython import VideosSearch
 
 from module.youtube.video import Video

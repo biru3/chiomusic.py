@@ -18,18 +18,18 @@ class VideoStream:
 
         self.queue_empty_timer = 0
 
-    async def wait(self) -> bool:
+    async def wait(self):
         self.queue_empty_timer = 0
         while True:
             await asyncio.sleep(1)
             self.queue_empty_timer += 1
             if self.playlist:
-                return True
+                return
             if self.queue_empty_timer >= 300:
                 for voice_channel in self.server.bot.voice_clients:
                     if voice_channel.guild == self.server.guild:
                         await voice_channel.disconnect(force=True)
-                return False
+                return
 
     async def run(self):
         while True:
@@ -41,7 +41,7 @@ class VideoStream:
                 self.server.guild.voice_client.stop()
                 try:
                     video = self.playlist.current_music()
-                    self.server.guild.voice_client.play(FFmpegPCMAudio(video.stream_url, executable="ffmpeg.exe", **FFMPEG_OPTIONS))
+                    self.server.guild.voice_client.play(FFmpegPCMAudio(video.stream_url, **FFMPEG_OPTIONS))
                 except QueueIsEmpty:
                     pass
 
@@ -51,20 +51,18 @@ class VideoStream:
                 except NextMusicNotExist:
                     await self.server.update_player()
                 except QueueIsEmpty:
-                    if await self.wait():
-                        await self.play()
-                        return
+                    await self.wait()
                     return
                 else:
                     video = self.playlist.current_music()
-                    self.server.guild.voice_client.play(FFmpegPCMAudio(video.stream_url, executable="ffmpeg.exe", **FFMPEG_OPTIONS))
+                    self.server.guild.voice_client.play(FFmpegPCMAudio(video.stream_url, **FFMPEG_OPTIONS))
                     await self.server.update_player()
             await asyncio.sleep(1)
 
     async def play(self):
         self.playing = True
         video = self.playlist.current_music()
-        self.server.guild.voice_client.play(FFmpegPCMAudio(video.stream_url, executable="ffmpeg.exe", **FFMPEG_OPTIONS))
+        self.server.guild.voice_client.play(FFmpegPCMAudio(video.stream_url, **FFMPEG_OPTIONS))
         await self.server.update_player()
         await self.run()
         return
