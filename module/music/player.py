@@ -3,7 +3,7 @@ import json
 from module.music.server import Server
 from module.music.exceptions import ServerNotFound
 
-PATH = "data/server.json"
+PATH = "./data/server.json"
 
 
 class MusicPlayerManager:
