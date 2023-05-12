@@ -39,7 +39,7 @@ class ChioMusic(commands.Bot):
         # change activity to online
         await self.change_presence(
             activity=Activity(
-                name="아리 1시간", type=ActivityType.listening, state=Status.online
+                name="test", type=ActivityType.listening, state=Status.online
             )
         )
         await self.music_manager.load_server()
