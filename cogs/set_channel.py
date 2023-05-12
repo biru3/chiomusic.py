@@ -17,7 +17,7 @@ class ChannelSetter(commands.Cog):
         except ServerNotFound:
             server = self.bot.music_manager.add_server(guild_id)
 
-        server.set_music_channel(channel=interaction.channel)
+        server.set_music_channel(channel=channel)
         embed, view = server.get_player()
         msg = await channel.send(embed=embed, view=view)
         server.set_music_channel(message=msg)
