@@ -19,5 +19,5 @@ EXPOSE 5000
 
 ENV DiscordApiToken ${DiscordApiToken}
 
-#CMD ["main.py"]
+#CMD ["main.py","0.0.0.0:5000"]
 #ENTRYPOINT ["python3"]
