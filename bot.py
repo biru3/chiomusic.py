@@ -39,7 +39,7 @@ class ChioMusic(commands.Bot):
         # change activity to online
         await self.change_presence(
             activity=Activity(
-                name="test", type=ActivityType.listening, state=Status.online
+                name="현재 치오의 채팅 기능은 비활성화 되어있습니다.", type=ActivityType.listening, state=Status.online
             )
         )
         await self.music_manager.load_server()
