@@ -62,8 +62,8 @@ class ChioMusic(commands.Bot):
                 server.playlist.clear()
                 await server.update_player()
                 embed = Embed(
-                    title="다들 어디로 간거죠?",
-                    description="음성 채널에 아무도 없어요..플레이리스트를 초기화하고 나가볼게요!",
+                    title="어디갔어..?",
+                    description="음성 채널에 아무도 없어서..나도 나갈게..?",
                 )
                 await server.get_channel().send(embed=embed, delete_after=3)
         return
@@ -82,8 +82,8 @@ class ChioMusic(commands.Bot):
         if message.author.voice is None:
             await message.delete()
             embed = Embed(
-                title="음성 채널에 접속한 후에 노래를 예약해주세요!",
-                description="치오와 같은 음성 채널에 접속한 멤버만 이 노래를 예약할 수 있어요",
+                title="음성 채널에 접속한 후에 노래를 예약해야해",
+                description="나랑 같은 음성 채널에 접속한 해야 이 노래를 예약할 수 있어..",
             )
             await message.channel.send(
                 message.author.mention, embed=embed, delete_after=3
@@ -100,8 +100,8 @@ class ChioMusic(commands.Bot):
                 if voice_client.guild == message.guild:
                     if voice_client.channel != message.author.voice.channel:
                         embed = Embed(
-                            title="치오와 같은 음성 채널에 접속한 후에 노래를 예약해주세요!",
-                            description="치오와 같은 음성 채널에 접속한 멤버만 이 노래를 예약할 수 있어요",
+                            title="나랑 같은 음성 채널에 접속한 후에 노래를 예약해야해",
+                            description="나랑 같은 음성 채널에 접속한 해야 이 노래를 예약할 수 있어..",
                         )
                         await message.channel.send(
                             message.author.mention, embed=embed, delete_after=3
@@ -113,7 +113,7 @@ class ChioMusic(commands.Bot):
 
         server.playlist.add(video)
 
-        embed = Embed(title="노래를 추가할게요!", description=video.title)
+        embed = Embed(title="노래를 추가할게!", description=video.title)
         await message.channel.send(embed=embed, delete_after=3)
 
         if len(server.playlist) == 1:
