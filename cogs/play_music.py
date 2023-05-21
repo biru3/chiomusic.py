@@ -6,7 +6,7 @@ class PlayMusic(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @app_commands.command(name="재생", description="노래를 재생해요")
+    @app_commands.command(name="재생", description="노래를 재생해")
     @app_commands.describe(search="영상 링크")
     async def command(self, interaction: Interaction, channel: str):
         return
