@@ -23,8 +23,8 @@ class EmbedPlayer:
     async def _check_member(self, interaction: Interaction) -> bool:
         if interaction.user.voice is None:
             embed = Embed(
-                title="음성 채널에 접속한 후에 노래를 예약해주세요!",
-                description="치오와 같은 음성 채널에 접속한 멤버만 이 노래를 예약할 수 있어요",
+                title="음성 채널에 접속한 후 노래를 예약해줘.",
+                description="나랑 같은 채널에 접속해야 노래를 예약 해줄 수 있어..",
             )
             await interaction.response.send_message(
                 interaction.user.mention, embed=embed, delete_after=3
@@ -34,8 +34,8 @@ class EmbedPlayer:
             if voice_channel.guild == self.server.guild:
                 if voice_channel.channel != interaction.user.voice.channel:
                     embed = Embed(
-                        title="치오와 같은 음성 채널에 접속한 후에 노래를 예약해주세요!",
-                        description="치오와 같은 음성 채널에 접속한 멤버만 이 노래를 예약할 수 있어요",
+                        title="나랑 같은 채널에 접속해야 노래를 예약 해줄 수 있어..",
+                        description="나랑 같은 채널에 접속해야 노래를 예약 해줄 수 있어..",
                     )
                     await interaction.response.send_message(
                         interaction.user.mention, embed=embed, delete_after=3
@@ -52,23 +52,23 @@ class EmbedPlayer:
         if self.playlist.is_empty():
             embed = Embed(
                 title="노래 예약 기다리는 중!",
-                description="이 채널에 재생하고 싶은 노래의 **제목**이나 **URL**을 입력해주세요!",
+                description="이 채널에 재생하고 싶은 노래의 **제목**이나 **URL**을 입력해줘!",
                 color=0xD4B886,
             ).set_image(
-                url="https://cdn.discordapp.com/attachments/1086549632882069564/1104730501597646910/IMG_2023_02_02_12_30_21.png"
+                url="https://media.discordapp.net/attachments/940520992646787105/1107284992553398364/chio_2.jpg?width=581&height=581"
             )
-            placeholder = "예약된 곡이 없어요"
+            placeholder = "예약된 곡이 없어.."
         else:
             if self.server.video_stream.playing:
-                title = "노래를 재생하고 있어요!"
+                title = "노래를 재생하고 있어!"
             else:
-                title = "노래를 잠시 멈췄어요!"
+                title = "노래를 잠시 멈췄어!"
             current_music = self.playlist.current_music()
 
             if self.playlist.is_next_exist():
                 placeholder = f"다음 곡) {self.playlist[1].title}"
             else:
-                placeholder = "다음 곡이 없어요!"
+                placeholder = "다음 곡이 없어!"
 
             embed = (
                 Embed(title=title, color=0xD4B886)
@@ -99,9 +99,9 @@ class EmbedPlayer:
                 )
         else:
             if self.playlist.is_empty():
-                playlist_view.add_option(label="예약된 곡이 없어요", value="EmptyPlaylist")
+                playlist_view.add_option(label="예약된 곡이 없어..", value="EmptyPlaylist")
             elif not self.playlist.is_next_exist():
-                playlist_view.add_option(label="다음 곡이 없어요!", value="NoNextMusic")
+                playlist_view.add_option(label="다음 곡이 없어..", value="NoNextMusic")
 
         # button
         button_stop = Button(emoji=BUTTON_STOP_EMOJI, style=ButtonStyle.red)
@@ -123,18 +123,18 @@ class EmbedPlayer:
 
             if selected == "EmptyPlaylist":
                 await interaction.response.send_message(
-                    "재생할 노래가 없어요! 먼저 노래를 예약해주세요", ephemeral=True, delete_after=3
+                    "재생할 노래가 없어! 먼저 노래를 예약해야해", ephemeral=True, delete_after=3
                 )
                 return
             if selected == "NoNextMusic":
                 await interaction.response.send_message(
-                    "다음 곡이 없어요! 노래를 예약해주세요", ephemeral=True, delete_after=3
+                    "다음 곡이 없어! 노래를 예약해야해", ephemeral=True, delete_after=3
                 )
                 return
 
             self.playlist.jump_to(int(selected))
             await interaction.response.send_message(
-                "곡을 넘겼어요!", ephemeral=True, delete_after=3
+                "곡을 넘겼어!", ephemeral=True, delete_after=3
             )
             self.server.video_stream.next()
             await self.update()
@@ -147,7 +147,7 @@ class EmbedPlayer:
             self.play = False
             self.playlist.clear()
             await interaction.response.send_message(
-                "안녕히계세요!", ephemeral=True, delete_after=3
+                "바이~", ephemeral=True, delete_after=3
             )
 
             for voice_channel in self.bot.voice_clients:
@@ -163,18 +163,18 @@ class EmbedPlayer:
 
             if self.playlist.is_empty():
                 await interaction.response.send_message(
-                    "재생할 노래가 없어요! 먼저 노래를 예약해주세요", ephemeral=True, delete_after=3
+                    "재생할 노래가 없어! 먼저 노래를 예약해야해", ephemeral=True, delete_after=3
                 )
                 return
 
             if not self.server.video_stream.playing:
                 await interaction.response.send_message(
-                    "노래를 다시 재생할게요!", ephemeral=True, delete_after=3
+                    "노래를 다시 재생할게!", ephemeral=True, delete_after=3
                 )
                 self.server.video_stream.resume()
             else:
                 await interaction.response.send_message(
-                    "노래를 멈출게요!", ephemeral=True, delete_after=3
+                    "노래를 멈출게!", ephemeral=True, delete_after=3
                 )
                 self.server.video_stream.pause()
 
@@ -188,17 +188,17 @@ class EmbedPlayer:
                 self.playlist.next()
             except QueueIsEmpty:
                 await interaction.response.send_message(
-                    "넘길 노래가 없어요! 노래를 다시 예약해주세요", ephemeral=True, delete_after=3
+                    "넘길 노래가 없어! 노래를 다시 예약해야해", ephemeral=True, delete_after=3
                 )
                 return
             except NextMusicNotExist:
                 await interaction.response.send_message(
-                    "다음 노래가 없어, 재생을 중단할게요!", ephemeral=True, delete_after=3
+                    "다음 노래가 없어, 재생을 중단할게!", ephemeral=True, delete_after=3
                 )
                 self.server.video_stream.stop()
             else:
                 await interaction.response.send_message(
-                    "다음 곡을 재생할게요!", ephemeral=True, delete_after=3
+                    "다음 곡을 재생할게!", ephemeral=True, delete_after=3
                 )
 
             self.server.video_stream.next()
